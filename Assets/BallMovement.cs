@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +11,7 @@ public class BallMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        var = new Vector3(2, 3, 0);
+        var = new Vector3(4, 1, 0);
 
     }
 
@@ -25,13 +26,14 @@ public class BallMovement : MonoBehaviour
     {
         //rigidbody.velocity = Vector3.Reflect(rigidbody.velocity, collision.contacts[0].normal);
         Vector3 normal = collision.contacts[0].normal;
-        colAngle = 180 - Vector3.Angle(var, -normal) ;
-        Debug.Log(colAngle);
-        var = new Vector3(var.x * Mathf.Cos(colAngle * Mathf.Deg2Rad), var.y * Mathf.Cos(colAngle * Mathf.Deg2Rad), 0);
-        //var = Vector3.Reflect(this.transform.position, collision.contacts[0].normal);
-        Debug.Log(colAngle);
-        Debug.Log(var);
+        if (Math.Abs(normal.x) > Math.Abs(normal.y))
+        {
+            var = new Vector3(-var.x, var.y, 0);
+        }
+        if (Math.Abs(normal.x) < Math.Abs(normal.y))
+        {
+            var = new Vector3(var.x, -var.y, 0);
 
-        Debug.Log(Mathf.Cos(90 *Mathf.Deg2Rad));
+        }
     }
 }
