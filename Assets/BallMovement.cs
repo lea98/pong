@@ -5,20 +5,30 @@ using UnityEngine;
 
 public class BallMovement : MonoBehaviour
 {
-    public Vector3 var;
-    public float colAngle;
+    private Vector3 direction= new Vector3(0, 0, 0);
+    public float xSpeed = 0f;
+    public float ySpeed = 0f;
+    private int turnFlag = 1;
+
+    public void RestartBall()
+    {
+        gameObject.transform.position = new Vector3(0, 0, 0);
+        turnFlag *= -1;
+        direction = new Vector3(UnityEngine.Random.Range(0.5f, 1f) * turnFlag, UnityEngine.Random.Range(0.5f, 1f)* (UnityEngine.Random.Range(0, 2) * 2 - 1), 0);
+
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        var = new Vector3(4, 1, 0);
+        direction = new Vector3(UnityEngine.Random.Range(0.5f, 1f), UnityEngine.Random.Range(-0.5f, -0.5f), 0);
 
     }
 
-    // Update is called once per frame
-    void Update()
+// Update is called once per frame
+void Update()
     {
-        gameObject.transform.position += new Vector3(var.x * Time.deltaTime, var.y * Time.deltaTime, var.z * Time.deltaTime) ;
+        gameObject.transform.position += new Vector3(xSpeed * Time.deltaTime * direction.x, ySpeed * Time.deltaTime * direction.y, direction.z * Time.deltaTime);
 
     }
 
@@ -26,14 +36,6 @@ public class BallMovement : MonoBehaviour
     {
         //rigidbody.velocity = Vector3.Reflect(rigidbody.velocity, collision.contacts[0].normal);
         Vector3 normal = collision.contacts[0].normal;
-        if (Math.Abs(normal.x) > Math.Abs(normal.y))
-        {
-            var = new Vector3(-var.x, var.y, 0);
-        }
-        if (Math.Abs(normal.x) < Math.Abs(normal.y))
-        {
-            var = new Vector3(var.x, -var.y, 0);
-
-        }
+        direction = Vector3.Reflect(direction, normal);
     }
 }
